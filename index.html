@@ -15,6 +15,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Supabase JS Client Oficial -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -1092,11 +1095,11 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-xs font-semibold text-arocena-charcoal mb-1">Nombre de la Empresa *</label>
-                  <input type="text" required placeholder="Ej. Restaurante San Ángel" class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-arocena-border bg-white focus:outline-none focus:ring-2 focus:ring-arocena-terracotta">
+                  <input type="text" id="partner-company" required placeholder="Ej. Restaurante San Ángel" class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-arocena-border bg-white focus:outline-none focus:ring-2 focus:ring-arocena-terracotta">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-arocena-charcoal mb-1">Giro Comercial *</label>
-                  <select required class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-arocena-border bg-white focus:outline-none focus:ring-2 focus:ring-arocena-terracotta">
+                  <select id="partner-type" required class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-arocena-border bg-white focus:outline-none focus:ring-2 focus:ring-arocena-terracotta">
                     <option value="">Selecciona un giro</option>
                     <option value="gastronomia">Gastronomía / Cafetería</option>
                     <option value="hotel">Hospedaje / Hotelería</option>
@@ -1110,22 +1113,22 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-xs font-semibold text-arocena-charcoal mb-1">Persona de Contacto *</label>
-                  <input type="text" required placeholder="Nombre completo" class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-arocena-border bg-white focus:outline-none focus:ring-2 focus:ring-arocena-terracotta">
+                  <input type="text" id="partner-name" required placeholder="Nombre completo" class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-arocena-border bg-white focus:outline-none focus:ring-2 focus:ring-arocena-terracotta">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-arocena-charcoal mb-1">WhatsApp / Teléfono *</label>
-                  <input type="tel" required placeholder="(871) 000-0000" class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-arocena-border bg-white focus:outline-none focus:ring-2 focus:ring-arocena-terracotta">
+                  <input type="tel" id="partner-phone" required placeholder="(871) 000-0000" class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-arocena-border bg-white focus:outline-none focus:ring-2 focus:ring-arocena-terracotta">
                 </div>
               </div>
 
               <div>
                 <label class="block text-xs font-semibold text-arocena-charcoal mb-1">Correo Electrónico *</label>
-                <input type="email" required placeholder="contacto@tuempresa.com" class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-arocena-border bg-white focus:outline-none focus:ring-2 focus:ring-arocena-terracotta">
+                <input type="email" id="partner-email" required placeholder="contacto@tuempresa.com" class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-arocena-border bg-white focus:outline-none focus:ring-2 focus:ring-arocena-terracotta">
               </div>
 
               <div>
                 <label class="block text-xs font-semibold text-arocena-charcoal mb-1">Propuesta de Alianza o Comentarios</label>
-                <textarea rows="3" placeholder="Describe brevemente qué descuento o dinámica te gustaría ofrecer a los visitantes..." class="w-full text-xs px-3.5 py-2 rounded-lg border border-arocena-border bg-white focus:outline-none focus:ring-2 focus:ring-arocena-terracotta"></textarea>
+                <textarea id="partner-proposal" rows="3" placeholder="Describe brevemente qué descuento o dinámica te gustaría ofrecer a los visitantes..." class="w-full text-xs px-3.5 py-2 rounded-lg border border-arocena-border bg-white focus:outline-none focus:ring-2 focus:ring-arocena-terracotta"></textarea>
               </div>
 
               <div class="flex items-start gap-2 pt-1">
@@ -1527,6 +1530,13 @@
 
   <!-- JAVASCRIPT MODULAR Y REACTIVO -->
   <script>
+    // 0. Conexión oficial a Supabase (Base de datos en tiempo real)
+    const SUPABASE_URL = "https://bmkptgizncadgotsnpdj.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJta3B0Z2l6bmNhZGdvdHNucGRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5Mzg4NTEsImV4cCI6MjExMDUxNDg1MX0._LxlFNn-_hc03XrYN-wsj1YmfFtw6T-dHnKwI7OhroM";
+    const supabaseClient = (window.supabase && window.supabase.createClient) 
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
+      : null;
+
     // 1. Horarios y status en tiempo real
     (function checkMuseumOpenStatus() {
       const now = new Date();
@@ -1803,6 +1813,18 @@
 
       pkgNameEl.textContent = recPackage;
       pkgSubEl.textContent = recSub;
+
+      // Guardar consulta del planeador en Supabase
+      if (supabaseClient) {
+        supabaseClient.from('planes_visita').insert([{
+          profile: who,
+          duration: time,
+          vibe: vibe,
+          recommended_package: recPackage
+        }]).then(({ error }) => {
+          if (error) console.warn('Supabase planes_visita:', error.message);
+        });
+      }
     }
 
     function resetPlanner() {
@@ -1830,9 +1852,32 @@
       document.body.removeChild(link);
     }
 
-    // 7. Formularios
-    function handlePartnerSubmit(e) {
+    // 7. Formularios y guardado en Supabase
+    async function handlePartnerSubmit(e) {
       e.preventDefault();
+      const company = document.getElementById('partner-company')?.value.trim();
+      const btype = document.getElementById('partner-type')?.value;
+      const contact = document.getElementById('partner-name')?.value.trim();
+      const phone = document.getElementById('partner-phone')?.value.trim();
+      const email = document.getElementById('partner-email')?.value.trim();
+      const proposal = document.getElementById('partner-proposal')?.value.trim();
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('solicitudes_aliados').insert([{
+            company_name: company,
+            business_type: btype,
+            contact_name: contact,
+            phone: phone,
+            email: email,
+            proposal: proposal,
+            status: 'pending'
+          }]);
+        } catch (err) {
+          console.warn('Supabase solicitudes_aliados error:', err);
+        }
+      }
+
       document.getElementById('partner-form').classList.add('hidden');
       document.getElementById('partner-success').classList.remove('hidden');
     }
@@ -1869,7 +1914,7 @@
       }
     }
 
-    function handlePhoneSubscribeSubmit(e) {
+    async function handlePhoneSubscribeSubmit(e) {
       e.preventDefault();
       const phoneInput = document.getElementById('sub-phone-input');
       const phone = phoneInput.value.trim();
@@ -1886,6 +1931,20 @@
         return;
       }
 
+      // Guardar en Supabase
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('suscriptores_ofertas').insert([{
+            contact_type: 'phone',
+            contact_value: '+52 ' + phone,
+            channels: selectedChannels,
+            status: 'active'
+          }]);
+        } catch (err) {
+          console.warn('Supabase suscriptores_ofertas phone error:', err);
+        }
+      }
+
       const fb = document.getElementById('phone-feedback');
       fb.innerHTML = `✓ ¡Listo! Registramos tu número <strong>+52 ${phone}</strong> para enviarte la cartelera y ofertas exclusivas a través de: <strong>${selectedChannels.join(', ')}</strong>.`;
       fb.classList.remove('hidden');
@@ -1893,11 +1952,28 @@
       setTimeout(() => fb.classList.add('hidden'), 8000);
     }
 
-    function handleEmailSubscribeSubmit(e) {
+    async function handleEmailSubscribeSubmit(e) {
       e.preventDefault();
+      const emailInput = document.getElementById('sub-email-input');
+      const email = emailInput.value.trim();
+
+      // Guardar en Supabase
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('suscriptores_ofertas').insert([{
+            contact_type: 'email',
+            contact_value: email,
+            channels: ['email'],
+            status: 'active'
+          }]);
+        } catch (err) {
+          console.warn('Supabase suscriptores_ofertas email error:', err);
+        }
+      }
+
       const fb = document.getElementById('email-feedback');
       fb.classList.remove('hidden');
-      document.getElementById('sub-email-input').value = '';
+      emailInput.value = '';
       setTimeout(() => fb.classList.add('hidden'), 5000);
     }
 
